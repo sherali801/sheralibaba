@@ -1,0 +1,17 @@
+.panel-body a img {
+  height: 200px;
+  width: 200px;
+}
+
+a:hover {
+  text-decoration: none;
+}
+
+h2, h3 {
+  color: #2e6da4;
+}
+
+img {
+  height: 200px;
+  width: 200px;
+}
