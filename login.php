@@ -1,5 +1,7 @@
 <?php
-session_start();
+
+require_once "src/session.php";
+
 if (isset($_SESSION["user_admin_id"])) {
   header("Location: admin/index.php");
   exit;
