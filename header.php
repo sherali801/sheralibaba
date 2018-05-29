@@ -12,3 +12,5 @@
 	<?php require_once "navbar.php"; ?>
 
 	<div class="container">
+		<?php require_once "error_messages.php"; ?>
+		<?php require_once "success_messages.php"; ?>
