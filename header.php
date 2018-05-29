@@ -8,4 +8,7 @@
 	<title>sheralibaba</title>
 </head>
 <body>
+	
+	<?php require_once "navbar.php"; ?>
+
 	<div class="container">

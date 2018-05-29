@@ -59,82 +59,8 @@ if (isset($_POST["submit"])) {
 
 ?>
 
-<!DOCTYPE html>
-<html lang="en-US">
-<head>
-  <meta charset="utf-8">
-  <title>sheralibaba</title>
-  <link type="text/css" href="css/bootstrap.min.css" rel="stylesheet">
-  <link type="text/css" href="css/styles.css" rel="stylesheet">
-</head>
-<body>
-<div class="container container-fluid">
-  <nav class="navbar navbar-default">
-    <div class="container-fluid">
-      <!-- Brand and toggle get grouped for better mobile display -->
-      <div class="navbar-header">
-        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-          <span class="sr-only">Toggle navigation</span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-          <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="index.php">sheralibaba</a>
-      </div>
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-        <ul class="nav navbar-nav">
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Manufacturers <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <?php
-              $sql = "SELECT id, business_name FROM manufacturer";
-              $result = $db->query($sql);
-              if (!$result) {
-                die("Please Try Again Later.");
-              }
-              while ($row = $result->fetch_assoc()) {
-                echo "<li><a href='product_by_manufacturer.php?manufacturer_id={$row["id"]}'>" . htmlentities($row["business_name"]) . "</a></li>";
-              }
-              ?>
-            </ul>
-          </li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Categories <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <?php
-              $sql = "SELECT id, category_name FROM category";
-              $result = $db->query($sql);
-              if (!$result) {
-                die("Please Try Again Later.");
-              }
-              while ($row = $result->fetch_assoc()) {
-                echo "<li><a href='product_by_category.php?category_id={$row["id"]}'>" . htmlentities($row["category_name"]) . "</a></li>";
-              }
-              ?>
-            </ul>
-          </li>
-        </ul>
-        <form class="navbar-form navbar-left" action="index.php" method="get">
-          <div class="form-group">
-            <input type="search" name="q" class="form-control" placeholder="Search">
-          </div>
-          <button type="submit" class="btn btn-info">Go</button>
-        </form>
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="advance_search.php">Advance Search</a></li>
-          <li><a href="login.php">Log In</a></li>
-          <li class="dropdown">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Sign Up <span class="caret"></span></a>
-            <ul class="dropdown-menu">
-              <li><a href="manufacturer_signup.php">Manufacturer</a></li>
-              <li><a href="buyer_signup.php">Buyer</a></li>
-            </ul>
-          </li>
-        </ul>
-      </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-  </nav>
+<?php require_once "header.php"; ?>
+
   <h2 class="text-center">Login</h2>
   <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" class="form-horizontal">
     <?php
@@ -170,9 +96,5 @@ if (isset($_POST["submit"])) {
       </div>
     </div>
   </form>
-</div>
-<script src="js/jquery-3.2.1.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
-</body>
-</html>
-<?php $db->close(); ?>
+
+<?php require_once "footer.php"; ?>
