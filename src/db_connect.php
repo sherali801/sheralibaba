@@ -1,14 +1,14 @@
 <?php
 
-require_once __DIR__ . "/config.php";
+require_once "config.php";
 
 try {
-  $db = new mysqli(DB_SERVER, DB_USER, DB_PWD, DB_NAME);
-  if ($db->error) {
-    die("Please Try Again Later.");
-  }
+	$db = new mysqli(DB_SERVER, DB_USER, DB_PASSWORD, DB_NAME);
+	if ($db->error) {
+		require_once "../404.php";
+		exit(1);
+	}
 } catch (Exception $e) {
-  die("Please Try Again Later.");
+	require_once "../404.php";
+	exit(1);
 }
-
-?>
