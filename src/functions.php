@@ -18,6 +18,23 @@ function array_remove($element, $array) {
   return $array;
 }
 
+function authenticateUser() {
+	if (!isset($_SESSION["id"])) {
+		return false;
+	}
+	return true;
+}
+
+function authenticateAdmin() {
+	if (!authenticateUser()) {
+		return false;
+	}
+	if (!isset($_SESSION["role"])) {
+		return false;
+	}
+	return $_SESSION["role"] == 1;
+}
+
 function validateUser($username, $password) {
 	global $conn;
 	$sql = "SELECT * 
