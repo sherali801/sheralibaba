@@ -136,3 +136,14 @@ function updateAddress($id, $street, $city, $state, $country, $zip, $dt) {
 	$result = mysqli_query($conn, $sql);
 	return mysqli_affected_rows($conn) >= 0;
 }
+
+function addNewCategory($categoryName, $adminId, $dt) {
+	global $conn;
+	$sql = "INSERT INTO category (
+			category_name, created_date, modified_date, admin_id
+			) VALUES (
+			'{$categoryName}', '{$dt}', '{$dt}', {$adminId}
+			)";
+	$result = mysqli_query($conn, $sql);
+	return mysqli_affected_rows($conn) == 1;
+}
