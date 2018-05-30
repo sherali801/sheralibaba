@@ -35,6 +35,16 @@ function authenticateAdmin() {
 	return $_SESSION["role"] == 1;
 }
 
+function authenticateManufacturer() {
+	if (!authenticateUser()) {
+		return false;
+	}
+	if (!isset($_SESSION["role"])) {
+		return false;
+	}
+	return $_SESSION["role"] == 2;
+}
+
 function validateUser($username, $password) {
 	global $conn;
 	$sql = "SELECT * 
