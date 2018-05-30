@@ -384,3 +384,46 @@ function getAllVisibleProducts() {
 	}
 	return null;
 }
+
+function getBuyerProfile($id) {
+	global $conn;
+	$sql = "SELECT user.id userId, user.username username, buyer.id buyerId, buyer.first_name firstName, buyer.last_name lastName, buyer.contact_no contactNo, buyer.email email, address.id addressId, address.street street, address.city city, address.state state, address.country country, address.zip zip
+			FROM user, buyer, address
+			WHERE user.id = {$id}
+			AND user.role = 3 
+			AND user.role_id = buyer.id
+			AND user.address_id = address.id";
+	if ($result = mysqli_query($conn, $sql)) {
+		$row = mysqli_fetch_assoc($result);
+		return $row;
+	}
+	return null;
+}
+
+function updateBuyerProfile($id, $username, $password, $buyerId, $firstName, $lastName, $email, $contactNo, $addressId, $street, $city, $state, $country, $zip, $dt) {
+	global $conn;
+	$status = false;
+	$conn->autocommit(false);
+	if (updateAddress($addressId, $street, $city, $state, $country, $zip, $dt)) {
+		if (updateBuyer($buyerId, $firstName, $lastName, $email, $contactNo, $dt)) {
+			if (updateUser($id, $username, $password, $dt)) {
+				$status = true;
+			}
+		}
+	}
+	$conn->autocommit(true);
+	return $status;
+}
+
+function updateBuyer($id, $firstName, $lastName, $email, $contactNo, $dt) {
+	global $conn;
+	$sql = "UPDATE buyer SET 
+			first_name = '{$firstName}',
+			last_name = '{$lastName}',
+			email = '{$email}',
+			contact_no = '{$contactNo}', 
+			modified_date = '{$dt}'
+			WHERE id = {$id}";
+	$result = mysqli_query($conn, $sql);
+	return mysqli_affected_rows($conn) >= 0;
+}
