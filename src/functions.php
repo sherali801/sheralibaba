@@ -171,3 +171,37 @@ function getAllCategoriesByAdminId($adminId) {
 	}
 	return null;
 }
+
+function getCategoryByIdWithAdminId($id, $adminId) {
+	global $conn;
+	$sql = "SELECT category.id id, category.category_name categoryName
+			FROM category
+			WHERE category.id = {$id}
+			AND category.admin_id = {$adminId}";
+	if ($result = mysqli_query($conn, $sql)) {
+		$row = mysqli_fetch_assoc($result);
+		return $row;
+	}
+	return null;
+}
+
+function duplicateCategoryNameWithId($categoryName, $id) {
+	global $conn;
+	$sql = "SELECT *
+			FROM category 
+			WHERE category_name = '{$categoryName}' 
+			AND id != {$id}";
+	$result = mysqli_query($conn, $sql);
+	return mysqli_num_rows($result) == 0;
+}
+
+function updateCategory($id, $categoryName, $adminId, $dt) {
+	global $conn;
+	$sql = "UPDATE category SET 
+			category_name = '{$categoryName}',
+			modified_date = '{$dt}'
+			WHERE id = {$id}
+			AND admin_id = {$adminId}";
+	$result = mysqli_query($conn, $sql);
+	return mysqli_affected_rows($conn) >= 0;
+}
