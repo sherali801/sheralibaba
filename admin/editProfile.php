@@ -28,7 +28,6 @@ if (isset($_POST["submit"])) {
   $country = $_POST["country"];
   $zip = $_POST["zip"];
   $dt = MySqlFormattedTime(time());
-  $conn->autocommit(false);
   if (duplicateUsernameWithId($username, $id)) {
     if (updateAdminProfile($id, $username, $password, $adminId, $firstName, $lastName, $email, $contactNo, $addressId, $street, $city, $state, $country, $zip, $dt)) {
       $_SESSION["successes"][] = "Profile has been updated.";
@@ -38,7 +37,6 @@ if (isset($_POST["submit"])) {
   } else {
     $_SESSION["errors"][] = "Login already exists.";
   }
-  $conn->autocommit(true);
 }
 
 ?>

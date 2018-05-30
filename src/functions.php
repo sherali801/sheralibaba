@@ -85,16 +85,18 @@ function duplicateUsernameWithId($username, $id) {
 }
 
 function updateAdminProfile($id, $username, $password, $adminId, $firstName, $lastName, $email, $contactNo, $addressId, $street, $city, $state, $country, $zip, $dt) {
+	global $conn;
+	$status = false;
+	$conn->autocommit(false);
 	if (updateAddress($addressId, $street, $city, $state, $country, $zip, $dt)) {
 		if (updateAdmin($adminId, $firstName, $lastName, $email, $contactNo, $dt)) {
 			if (updateUser($id, $username, $password, $dt)) {
-				return true;
+				$status = true;
 			}
-			return false;
 		}
-		return false;
 	}
-	return false;
+	$conn->autocommit(true);
+	return $status;
 }
 
 function updateUser($id, $username, $password, $dt) {
