@@ -40,17 +40,97 @@ function validateUser($username, $password) {
 	$sql = "SELECT * 
           FROM user 
           WHERE username = '{$username}'";
-	$result = mysqli_query($conn, $sql);
-	if ($result) {
-		while ($row = mysqli_fetch_assoc($result)) {
-			if ($row["username"] == $username && password_verify($password, $row["pwd"])) {
-				$_SESSION["id"] = $row["id"];
-				$_SESSION["username"] = $row["username"];
-				$_SESSION["role"] = $row["role"];
-				return true;
-			}
+	if ($result = mysqli_query($conn, $sql)) {
+		$row = mysqli_fetch_assoc($result);
+		if ($row["username"] == $username && password_verify($password, $row["pwd"])) {
+			$_SESSION["id"] = $row["id"];
+			$_SESSION["username"] = $row["username"];
+			$_SESSION["role"] = $row["role"];
+			return true;
 		}
 	}
 	$_SESSION["errors"][] = "Username/Password combination doesn't match.";
 	return false;
+}
+
+function getAdminProfile($id) {
+	global $conn;
+	$sql = "SELECT user.id userId, user.username username, admin.id adminId, admin.first_name firstName, admin.last_name lastName, admin.contact_no contactNo, admin.email email, address.id addressId, address.street street, address.city city, address.state state, address.country country, address.zip zip
+					FROM user, admin, address
+					WHERE user.id = {$id}
+					AND user.role = 1 
+					AND user.role_id = admin.id
+					AND user.address_id = address.id";
+	if ($result = mysqli_query($conn, $sql)) {
+		$row = mysqli_fetch_assoc($result);
+		return $row;
+	}
+	return null;
+}
+
+function duplicateUsernameWithId($username, $id) {
+	global $conn;
+	$sql = "SELECT COUNT(*)
+					FROM user 
+					WHERE username = '{$username}' 
+					AND id != {$id}";
+	if ($result = mysqli_query($conn, $sql)) {
+		$result = mysqli_fetch_row($result);
+		$result = array_shift($result);
+		if ($result) {
+			return false;
+		}
+	}
+	return true;
+}
+
+function updateAdminProfile($id, $username, $password, $adminId, $firstName, $lastName, $email, $contactNo, $addressId, $street, $city, $state, $country, $zip, $dt) {
+	if (updateAddress($addressId, $street, $city, $state, $country, $zip, $dt)) {
+		if (updateAdmin($adminId, $firstName, $lastName, $email, $contactNo, $dt)) {
+			if (updateUser($id, $username, $password, $dt)) {
+				return true;
+			}
+			return false;
+		}
+		return false;
+	}
+	return false;
+}
+
+function updateUser($id, $username, $password, $dt) {
+	global $conn;
+	$sql = "UPDATE user SET 
+					username = '{$username}',
+					pwd = '{$password}',
+					modified_date = '{$dt}'
+					WHERE id = {$id}";
+	$result = mysqli_query($conn, $sql);
+	return mysqli_affected_rows($conn) >= 0;
+}
+
+function updateAdmin($id, $firstName, $lastName, $email, $contactNo, $dt) {
+	global $conn;
+	$sql = "UPDATE admin SET 
+					first_name = '{$firstName}',
+					last_name = '{$lastName}',
+					email = '{$email}',
+					contact_no = '{$contactNo}', 
+					modified_date = '{$dt}'
+					WHERE id = {$id}";
+	$result = mysqli_query($conn, $sql);
+	return mysqli_affected_rows($conn) >= 0;
+}
+
+function updateAddress($id, $street, $city, $state, $country, $zip, $dt) {
+	global $conn;
+	$sql = "UPDATE address SET 
+					street = '{$street}',
+					city = '{$city}',
+					state = '{$state}',
+					country = '{$country}',
+					zip = '{$zip}', 
+					modified_date = '{$dt}'
+					WHERE id = {$id}";
+	$result = mysqli_query($conn, $sql);
+	return mysqli_affected_rows($conn) >= 0;
 }
