@@ -300,3 +300,18 @@ function addNewProduct($productName, $price, $quantity, $visibility, $imageURL, 
 	$result = mysqli_query($conn, $sql);
 	return mysqli_affected_rows($conn) == 1;
 }
+
+function getAllProductsByManufacturerId($manufacturerId) {
+	global $conn;
+	$sql = "SELECT *
+			FROM product
+			WHERE manufacturer_id = {$manufacturerId}";
+	if ($result = mysqli_query($conn, $sql)) {
+		$products = [];
+		while ($row = mysqli_fetch_assoc($result)) {
+			$products[] = $row;
+		}
+		return $products;
+	}
+	return null;
+}
