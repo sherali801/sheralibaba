@@ -13,12 +13,16 @@ $categoryName = "";
 if (isset($_POST["submit"])) {
   $dt = MySqlFormattedTime(time());
   $categoryName = $_POST["categoryName"];
-  $admin = getAdminProfile($_SESSION["id"]);
-  $adminId = $admin["adminId"];
-  if (addNewCategory($categoryName, $adminId, $dt)) {
-    $_SESSION["successes"][] = "Category has been added.";
+  if (duplicateCategoryName($categoryName)) {
+    $admin = getAdminProfile($_SESSION["id"]);
+    $adminId = $admin["adminId"];
+    if (addNewCategory($categoryName, $adminId, $dt)) {
+      $_SESSION["successes"][] = "Category has been added.";
+    } else {
+      $_SESSION["errors"][] = "Category was not added.";
+    }
   } else {
-    $_SESSION["errors"][] = "Category was not added.";
+    $_SESSION["errors"][] = "Category Name already exists.";
   }
 }
 

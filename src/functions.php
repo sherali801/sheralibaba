@@ -137,6 +137,15 @@ function updateAddress($id, $street, $city, $state, $country, $zip, $dt) {
 	return mysqli_affected_rows($conn) >= 0;
 }
 
+function duplicateCategoryName($categoryName) {
+	global $conn;
+	$sql = "SELECT *
+			FROM category 
+			WHERE category_name = '{$categoryName}'";
+	$result = mysqli_query($conn, $sql);
+	return mysqli_num_rows($result) == 0;
+}
+
 function addNewCategory($categoryName, $adminId, $dt) {
 	global $conn;
 	$sql = "INSERT INTO category (
