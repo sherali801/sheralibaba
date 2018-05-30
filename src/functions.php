@@ -315,3 +315,33 @@ function getAllProductsByManufacturerId($manufacturerId) {
 	}
 	return null;
 }
+
+function getProductByIdWithManufacturerId($id, $manufacturerId) {
+	global $conn;
+	$sql = "SELECT product.id id, product.product_name productName, product.price price, product.quantity quantity, product.visibility visibility, product.image_url imageURL, product.category_id categoryId, product.description description
+			FROM product
+			WHERE product.id = {$id}
+			AND product.manufacturer_id = {$manufacturerId}";
+	if ($result = mysqli_query($conn, $sql)) {
+		$row = mysqli_fetch_assoc($result);
+		return $row;
+	}
+	return null;
+}
+
+function updateProduct($id, $productName, $price, $quantity, $visibility, $imageURL, $categoryId, $description, $manufacturerId, $dt) {
+	global $conn;
+	$sql = "UPDATE product SET 
+			product_name = '{$productName}',
+			price = {$price},
+			quantity = {$quantity},
+			visibility = {$visibility},
+			image_url = '{$imageURL}',
+			category_id = {$categoryId},
+			description = '{$description}',
+			modified_date = '{$dt}'
+			WHERE id = {$id}
+			AND manufacturer_id = {$manufacturerId}";
+	$result = mysqli_query($conn, $sql);
+	return mysqli_affected_rows($conn) >= 0;
+}
