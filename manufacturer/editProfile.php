@@ -49,7 +49,7 @@ if (isset($_POST["submit"])) {
 <?php require_once "header.php"; ?>
 
 <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" class="form-horizontal">
-  <h3 class="text-center">Edit Profile</h2>
+  <h3 class="text-center">Edit Profile</h3>
   <input type="hidden" name="manufacturerId" value="<?php echo $manufacturerId; ?>">
   <input type="hidden" name="addressId" value="<?php echo $addressId; ?>">
   <div class="form-group">

@@ -275,3 +275,28 @@ function duplicateBusinessNameWithId($businessName, $id) {
 	$result = mysqli_query($conn, $sql);
 	return mysqli_num_rows($result) == 0;
 }
+
+function getAllCategories() {
+	global $conn;
+	$sql = "SELECT *
+			FROM category";
+	if ($result = mysqli_query($conn, $sql)) {
+		$categories = [];
+		while ($row = mysqli_fetch_assoc($result)) {
+			$categories[] = $row;
+		}
+		return $categories;
+	}
+	return null;
+}
+
+function addNewProduct($productName, $price, $quantity, $visibility, $imageURL, $categoryId, $description, $manufacturerId, $dt) {
+	global $conn;
+	$sql = "INSERT INTO product (
+			product_name, price, quantity, visibility, image_url, category_id, description, created_date, modified_date, manufacturer_id
+			) VALUES (
+			'{$productName}', {$price}, {$quantity}, {$visibility}, '{$imageURL}', {$categoryId}, '{$description}', '{$dt}', '{$dt}', {$manufacturerId}
+			)";
+	$result = mysqli_query($conn, $sql);
+	return mysqli_affected_rows($conn) == 1;
+}
