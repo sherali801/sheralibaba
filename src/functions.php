@@ -215,3 +215,63 @@ function updateCategory($id, $categoryName, $adminId, $dt) {
 	$result = mysqli_query($conn, $sql);
 	return mysqli_affected_rows($conn) >= 0;
 }
+
+function getManufacturerProfile($id) {
+	global $conn;
+	$sql = "SELECT user.id userId, user.username username, manufacturer.id manufacturerId, manufacturer.business_name businessName, manufacturer.contact_no contactNo, manufacturer.email email, manufacturer.url url, manufacturer.description description, address.id addressId, address.street street, address.city city, address.state state, address.country country, address.zip zip
+			FROM user, manufacturer, address
+			WHERE user.id = {$id}
+			AND user.role = 2 
+			AND user.role_id = manufacturer.id
+			AND user.address_id = address.id";
+	if ($result = mysqli_query($conn, $sql)) {
+		$row = mysqli_fetch_assoc($result);
+		return $row;
+	}
+	return null;
+}
+
+function updateManufacturerProfile($id, $username, $password, $manufacturerId, $businessName, $email, $contactNo, $url, $description, $addressId, $street, $city, $state, $country, $zip, $dt) {
+	global $conn;
+	$status = false;
+	$conn->autocommit(false);
+	if (updateAddress($addressId, $street, $city, $state, $country, $zip, $dt)) {
+		if (updateManufacturer($manufacturerId, $businessName, $email, $contactNo, $url, $description, $dt)) {
+			if (updateUser($id, $username, $password, $dt)) {
+				$status = true;
+			} else {
+				die("3");
+			}
+		} else {
+			die("2");
+		}
+	} else {
+		die("1");
+	}
+	$conn->autocommit(true);
+	return $status;
+}
+
+function updateManufacturer($id, $businessName, $email, $contactNo, $url, $description, $dt) {
+	global $conn;
+	$sql = "UPDATE manufacturer SET 
+			business_name = '{$businessName}',
+			email = '{$email}',
+			contact_no = '{$contactNo}',
+			url = '{$url}',
+			description = '{$description}',  
+			modified_date = '{$dt}'
+			WHERE id = {$id}";
+	$result = mysqli_query($conn, $sql);
+	return mysqli_affected_rows($conn) >= 0;
+}
+
+function duplicateBusinessNameWithId($businessName, $id) {
+	global $conn;
+	$sql = "SELECT *
+			FROM manufacturer 
+			WHERE business_name = '{$businessName}' 
+			AND id != {$id}";
+	$result = mysqli_query($conn, $sql);
+	return mysqli_num_rows($result) == 0;
+}
