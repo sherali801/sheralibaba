@@ -35,6 +35,16 @@ function authenticateAdmin() {
 	return $_SESSION["role"] == 1;
 }
 
+function authenticateBuyer() {
+	if (!authenticateUser()) {
+		return false;
+	}
+	if (!isset($_SESSION["role"])) {
+		return false;
+	}
+	return $_SESSION["role"] == 3;
+}
+
 function authenticateManufacturer() {
 	if (!authenticateUser()) {
 		return false;
@@ -344,4 +354,33 @@ function updateProduct($id, $productName, $price, $quantity, $visibility, $image
 			AND manufacturer_id = {$manufacturerId}";
 	$result = mysqli_query($conn, $sql);
 	return mysqli_affected_rows($conn) >= 0;
+}
+
+function getAllManufacturers() {
+	global $conn;
+	$sql = "SELECT *
+			FROM manufacturer";
+	if ($result = mysqli_query($conn, $sql)) {
+		$manufacturers = [];
+		while ($row = mysqli_fetch_assoc($result)) {
+			$manufacturers[] = $row;
+		}
+		return $manufacturers;
+	}
+	return null;
+}
+
+function getAllVisibleProducts() {
+	global $conn;
+	$sql = "SELECT *
+			FROM product
+			WHERE visibility = 1";
+	if ($result = mysqli_query($conn, $sql)) {
+		$products = [];
+		while ($row = mysqli_fetch_assoc($result)) {
+			$products[] = $row;
+		}
+		return $products;
+	}
+	return null;
 }
