@@ -370,11 +370,12 @@ function getAllManufacturers() {
 	return null;
 }
 
-function getAllVisibleProducts() {
+function getAllVisibleProducts($perPage, $offset) {
 	global $conn;
 	$sql = "SELECT *
 			FROM product
-			WHERE visibility = 1";
+			WHERE visibility = 1
+			LIMIT {$perPage} OFFSET {$offset}";
 	if ($result = mysqli_query($conn, $sql)) {
 		$products = [];
 		while ($row = mysqli_fetch_assoc($result)) {
@@ -426,4 +427,16 @@ function updateBuyer($id, $firstName, $lastName, $email, $contactNo, $dt) {
 			WHERE id = {$id}";
 	$result = mysqli_query($conn, $sql);
 	return mysqli_affected_rows($conn) >= 0;
+}
+
+function getCountOfProducts() {
+	global $conn;
+	$countOfProducts = 0;
+	$sql = "SELECT COUNT(*)
+			FROM product";
+	if ($result = mysqli_query($conn, $sql)) {
+		$result = mysqli_fetch_row($result);
+		$countOfProducts = array_shift($result);
+	}
+	return $countOfProducts;
 }
