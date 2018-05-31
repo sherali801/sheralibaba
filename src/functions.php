@@ -205,6 +205,30 @@ function getCategoryByIdWithAdminId($id, $adminId) {
 	return null;
 }
 
+function getCategoryById($id) {
+	global $conn;
+	$sql = "SELECT *
+			FROM category
+			WHERE category.id = {$id}";
+	if ($result = mysqli_query($conn, $sql)) {
+		$row = mysqli_fetch_assoc($result);
+		return $row;
+	}
+	return null;
+}
+
+function getManufactuerById($id) {
+	global $conn;
+	$sql = "SELECT *
+			FROM manufacturer
+			WHERE manufacturer.id = {$id}";
+	if ($result = mysqli_query($conn, $sql)) {
+		$row = mysqli_fetch_assoc($result);
+		return $row;
+	}
+	return null;
+}
+
 function duplicateCategoryNameWithId($categoryName, $id) {
 	global $conn;
 	$sql = "SELECT *
@@ -471,4 +495,17 @@ function getCountOfProducts($q, $manufacturerId, $categoryId) {
 		$countOfProducts = array_shift($result);
 	}
 	return $countOfProducts;
+}
+
+function getVisibleProductById($id) {
+	global $conn;
+	$sql = "SELECT product.id id, product.product_name productName, product.price price, product.quantity quantity, product.visibility visibility, product.image_url imageURL, product.category_id categoryId, product.manufacturer_id manufacturerId, product.description description
+			FROM product
+			WHERE product.id = {$id}
+			AND visibility = 1";
+	if ($result = mysqli_query($conn, $sql)) {
+		$row = mysqli_fetch_assoc($result);
+		return $row;
+	}
+	return null;
 }
