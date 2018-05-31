@@ -8,6 +8,10 @@ if (!authenticateBuyer()) {
   redirect("../login.php");
 }
 
+if (!isset($_SESSION["cart"])) {
+  $_SESSION["cart"] = [];
+}
+
 $perPage = 3;
 
 if (isset($_GET["currentPage"]) && !empty($_GET["currentPage"])) {
@@ -49,11 +53,11 @@ $products = getAllVisibleProducts($q, $manufacturerId, $categoryId, $perPage, $o
     <?php foreach ($products as $product) { ?>
       <div class="text-center col-lg-4 col-md-4 col-sm-6 col-xs-12">
         <div class="panel panel-default">
-          <div class="panel-heading"><a class="link" href="product.php?id=<?php echo $product["id"]; ?>"><h3><?php echo $product["product_name"]; ?></h3></a></div>
-          <div class="panel-body"><img src="<?php echo $product["image_url"]; ?>" heght="300" width="300"></div>
+          <div class="panel-heading"><a href="product.php?id=<?php echo $product["id"]; ?>"><h3><?php echo $product["product_name"]; ?></h3></a></div>
+          <div class="panel-body"><a href="product.php?id=<?php echo $product["id"]; ?>"><img src="<?php echo $product["image_url"]; ?>" heght="300" width="300"></a></div>
           <div class="panel-footer">
             <h3>$<?php echo $product["price"]; ?></h3>
-            <button class="btn btn-primary">Add to Cart</button>
+            <button id=<?php echo $product["id"]; ?> class="btn <?php echo isProductInCart($product["id"]) ? "btn-success inCart" : "btn-primary addToCart"; ?>"><?php echo isProductInCart($product["id"]) ? "In Cart" : "Add to Cart"; ?></button>
           </div>
         </div>
       </div>

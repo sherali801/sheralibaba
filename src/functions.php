@@ -12,12 +12,6 @@ function redirect($to) {
 	exit(0);
 }
 
-function array_remove($element, $array) {
-  $index = array_search($element, $array);
-  array_splice($array, $index, 1);
-  return $array;
-}
-
 function authenticateUser() {
 	if (!isset($_SESSION["id"])) {
 		return false;
@@ -508,4 +502,18 @@ function getVisibleProductById($id) {
 		return $row;
 	}
 	return null;
+}
+
+function isProductInCart($id) {
+	return in_array($id, $_SESSION["cart"]);
+}
+
+function array_remove($element, $array) {
+    $index = array_search($element, $array);
+    array_splice($array, $index, 1);
+    return $array;
+}
+
+function removeFromCart($id) {
+	$_SESSION['cart'] = array_remove($id, $_SESSION['cart']);
 }
