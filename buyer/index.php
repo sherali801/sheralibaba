@@ -10,19 +10,34 @@ if (!authenticateBuyer()) {
 
 $perPage = 3;
 
-$currentPage = 1;
 if (isset($_GET["currentPage"]) && !empty($_GET["currentPage"])) {
   $currentPage = $_GET["currentPage"];
+} else {
+  $currentPage = 1;
 }
-$q = "";
+
 if (isset($_GET["q"]) && !empty($_GET["q"])) {
   $q = $_GET["q"];
+} else {
+  $q = "";
 }
-$totalCount = getCountOfProducts($q);
+
+if (isset($_GET["manufacturerId"]) && !empty($_GET["manufacturerId"])) {
+  $manufacturerId = $_GET["manufacturerId"];
+} else {
+  $manufacturerId = 0;
+}
+if (isset($_GET["categoryId"]) && !empty($_GET["categoryId"])) {
+  $categoryId = $_GET["categoryId"];
+} else {
+  $categoryId = 0;
+}
+
+$totalCount = getCountOfProducts($q, $manufacturerId, $categoryId);
 $offset = ($currentPage - 1) * $perPage;
 $totalPages = ceil($totalCount / $perPage);
 
-$products = getAllVisibleProducts($q, $perPage, $offset);
+$products = getAllVisibleProducts($q, $manufacturerId, $categoryId, $perPage, $offset);
 
 ?>
 
@@ -49,18 +64,18 @@ $products = getAllVisibleProducts($q, $perPage, $offset);
       <?php if ($currentPage - 1 >= 1) { ?>
       <?php $previousPage = $currentPage - 1; ?>
         <li>
-          <a href="<?php echo $_SERVER["PHP_SELF"] . "?q={$q}&currentPage={$previousPage}"; ?>" aria-label="Previous">
+          <a href="<?php echo $_SERVER["PHP_SELF"] . "?q={$q}&manufacturerId={$manufacturerId}&categoryId={$categoryId}&currentPage={$previousPage}"; ?>" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
       <?php } ?>
       <?php for ($i = 1; $i <= $totalPages; $i++) { ?>
-        <li class="<?php echo $currentPage == $i ? "active" : ""; ?>"><a href="<?php echo $_SERVER["PHP_SELF"] . "?q={$q}&currentPage={$i}"; ?>"><?php echo $i; ?></a></li>
+        <li class="<?php echo $currentPage == $i ? "active" : ""; ?>"><a href="<?php echo $_SERVER["PHP_SELF"] . "?q={$q}&manufacturerId={$manufacturerId}&categoryId={$categoryId}&currentPage={$i}"; ?>"><?php echo $i; ?></a></li>
       <?php } ?>
       <?php if ($currentPage + 1 <= $totalPages) { ?>
         <?php $nextPage = $currentPage + 1; ?>
         <li>
-          <a href="<?php echo $_SERVER["PHP_SELF"] . "?q={$q}&currentPage={$nextPage}"; ?>" aria-label="Next">
+          <a href="<?php echo $_SERVER["PHP_SELF"] . "?q={$q}&manufacturerId={$manufacturerId}&categoryId={$categoryId}&currentPage={$nextPage}"; ?>" aria-label="Next">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>

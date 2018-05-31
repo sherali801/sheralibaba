@@ -24,7 +24,7 @@ $categories = getAllCategories();
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Manufacturers <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <?php foreach ($manufacturers as $manufacturer) { ?>
-              <li><a href="productsByManufacturer.php?id=<?php echo $manufacturer["id"]; ?>"><?php echo $manufacturer["business_name"]; ?></a></li>
+              <li><a href="index.php?manufacturerId=<?php echo $manufacturer["id"]; ?>"><?php echo $manufacturer["business_name"]; ?></a></li>
             <?php } ?>
           </ul>
 		    </li>
@@ -32,13 +32,19 @@ $categories = getAllCategories();
           <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Categories <span class="caret"></span></a>
           <ul class="dropdown-menu">
             <?php foreach ($categories as $category) { ?>
-              <li><a href="productsByCategory.php?id=<?php echo $category["id"]; ?>"><?php echo $category["category_name"]; ?></a></li>
+              <li><a href="index.php?categoryId=<?php echo $category["id"]; ?>"><?php echo $category["category_name"]; ?></a></li>
             <?php } ?>
           </ul>
         </li>
       </ul>
       <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="get" class="navbar-form navbar-left">
         <div class="form-group">
+          <?php if (isset($_GET["manufacturerId"]) && !empty($_GET["manufacturerId"])) { ?>
+            <input type="hidden" name="manufacturerId" value="<?php echo $manufacturerId; ?>">
+          <?php } ?>
+          <?php if (isset($_GET["categoryId"]) && !empty($_GET["categoryId"])) { ?>
+            <input type="hidden" name="categoryId" value="<?php echo $categoryId; ?>">
+          <?php } ?>
           <input type="text" name="q" value="<?php echo $q; ?>" class="form-control" placeholder="Search">
         </div>
         <input type="submit" value="Submit" class="btn btn-primary">

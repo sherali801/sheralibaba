@@ -370,13 +370,19 @@ function getAllManufacturers() {
 	return null;
 }
 
-function getAllVisibleProducts($q, $perPage, $offset) {
+function getAllVisibleProducts($q, $manufacturerId, $categoryId, $perPage, $offset) {
 	global $conn;
 	$sql = "SELECT *
 			FROM product
 			WHERE visibility = 1";
 	if (!empty($q)) {
 		$sql .= " AND (product_name LIKE '%{$q}%' OR description LIKE '%{$q}%')";
+	}
+	if ($manufacturerId > 0) {
+		$sql .= " AND manufacturer_id = {$manufacturerId}";
+	}
+	if ($categoryId > 0) {
+		$sql .= " AND category_id = {$categoryId}";
 	}
 	$sql .= " LIMIT {$perPage} OFFSET {$offset}";
 	if ($result = mysqli_query($conn, $sql)) {
@@ -432,13 +438,33 @@ function updateBuyer($id, $firstName, $lastName, $email, $contactNo, $dt) {
 	return mysqli_affected_rows($conn) >= 0;
 }
 
-function getCountOfProducts($q) {
+function getCountOfProducts($q, $manufacturerId, $categoryId) {
 	global $conn;
 	$countOfProducts = 0;
 	$sql = "SELECT COUNT(*)
 			FROM product";
 	if (!empty($q)) {
-		$sql .= " WHERE product_name LIKE '%{$q}%' OR description LIKE '%{$q}%'";
+		$sql .= " WHERE (product_name LIKE '%{$q}%' OR description LIKE '%{$q}%')";
+	}
+	if ($manufacturerId > 0) {
+		if (!empty($q)) {
+			$sql .= " AND";
+		} else {
+			$sql .= " WHERE";
+		}
+		$sql .= " manufacturer_id = {$manufacturerId}";
+	}
+	if ($categoryId > 0) {
+		if (!empty($q)) {
+			$sql .= " AND";
+		} else {
+			if ($manufacturerId > 0) {
+				$sql .= " AND";
+			} else {
+				$sql .= " WHERE";
+			}
+		}
+		$sql .= " category_id = {$categoryId}";
 	}
 	if ($result = mysqli_query($conn, $sql)) {
 		$result = mysqli_fetch_row($result);
