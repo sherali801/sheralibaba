@@ -37,11 +37,11 @@ $categories = getAllCategories();
           </ul>
         </li>
       </ul>
-      <form class="navbar-form navbar-left">
+      <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="get" class="navbar-form navbar-left">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
+          <input type="text" name="q" value="<?php echo $q; ?>" class="form-control" placeholder="Search">
         </div>
-        <input type="submit" name="submit" value="Submit" class="btn btn-primary">
+        <input type="submit" value="Submit" class="btn btn-primary">
       </form>
       <ul class="nav navbar-nav navbar-right">
 	  	<li class="dropdown">

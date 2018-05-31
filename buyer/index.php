@@ -14,11 +14,15 @@ $currentPage = 1;
 if (isset($_GET["currentPage"]) && !empty($_GET["currentPage"])) {
   $currentPage = $_GET["currentPage"];
 }
-$totalCount = getCountOfProducts();
+$q = "";
+if (isset($_GET["q"]) && !empty($_GET["q"])) {
+  $q = $_GET["q"];
+}
+$totalCount = getCountOfProducts($q);
 $offset = ($currentPage - 1) * $perPage;
 $totalPages = ceil($totalCount / $perPage);
 
-$products = getAllVisibleProducts($perPage, $offset);
+$products = getAllVisibleProducts($q, $perPage, $offset);
 
 ?>
 
@@ -45,18 +49,18 @@ $products = getAllVisibleProducts($perPage, $offset);
       <?php if ($currentPage - 1 >= 1) { ?>
       <?php $previousPage = $currentPage - 1; ?>
         <li>
-          <a href="<?php echo $_SERVER["PHP_SELF"] . "?currentPage={$previousPage}"; ?>" aria-label="Previous">
+          <a href="<?php echo $_SERVER["PHP_SELF"] . "?q={$q}&currentPage={$previousPage}"; ?>" aria-label="Previous">
             <span aria-hidden="true">&laquo;</span>
           </a>
         </li>
       <?php } ?>
       <?php for ($i = 1; $i <= $totalPages; $i++) { ?>
-        <li class="<?php echo $currentPage == $i ? "active" : ""; ?>"><a href="<?php echo $_SERVER["PHP_SELF"] . "?currentPage={$i}"; ?>"><?php echo $i; ?></a></li>
+        <li class="<?php echo $currentPage == $i ? "active" : ""; ?>"><a href="<?php echo $_SERVER["PHP_SELF"] . "?q={$q}&currentPage={$i}"; ?>"><?php echo $i; ?></a></li>
       <?php } ?>
       <?php if ($currentPage + 1 <= $totalPages) { ?>
         <?php $nextPage = $currentPage + 1; ?>
         <li>
-          <a href="<?php echo $_SERVER["PHP_SELF"] . "?currentPage={$nextPage}"; ?>" aria-label="Next">
+          <a href="<?php echo $_SERVER["PHP_SELF"] . "?q={$q}&currentPage={$nextPage}"; ?>" aria-label="Next">
             <span aria-hidden="true">&raquo;</span>
           </a>
         </li>

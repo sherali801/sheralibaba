@@ -370,12 +370,15 @@ function getAllManufacturers() {
 	return null;
 }
 
-function getAllVisibleProducts($perPage, $offset) {
+function getAllVisibleProducts($q, $perPage, $offset) {
 	global $conn;
 	$sql = "SELECT *
 			FROM product
-			WHERE visibility = 1
-			LIMIT {$perPage} OFFSET {$offset}";
+			WHERE visibility = 1";
+	if (!empty($q)) {
+		$sql .= " AND (product_name LIKE '%{$q}%' OR description LIKE '%{$q}%')";
+	}
+	$sql .= " LIMIT {$perPage} OFFSET {$offset}";
 	if ($result = mysqli_query($conn, $sql)) {
 		$products = [];
 		while ($row = mysqli_fetch_assoc($result)) {
@@ -429,11 +432,14 @@ function updateBuyer($id, $firstName, $lastName, $email, $contactNo, $dt) {
 	return mysqli_affected_rows($conn) >= 0;
 }
 
-function getCountOfProducts() {
+function getCountOfProducts($q) {
 	global $conn;
 	$countOfProducts = 0;
 	$sql = "SELECT COUNT(*)
 			FROM product";
+	if (!empty($q)) {
+		$sql .= " WHERE product_name LIKE '%{$q}%' OR description LIKE '%{$q}%'";
+	}
 	if ($result = mysqli_query($conn, $sql)) {
 		$result = mysqli_fetch_row($result);
 		$countOfProducts = array_shift($result);
