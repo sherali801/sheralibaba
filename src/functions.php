@@ -517,3 +517,19 @@ function array_remove($element, $array) {
 function removeFromCart($id) {
 	$_SESSION['cart'] = array_remove($id, $_SESSION['cart']);
 }
+
+function getProductsInCart() {
+	global $conn;
+	$ids = implode(",", $_SESSION["cart"]);
+	$sql = "SELECT *
+			FROM product
+			WHERE id IN ({$ids})";
+	if ($result = mysqli_query($conn, $sql)) {
+		$products = [];
+		while ($row = mysqli_fetch_assoc($result)) {
+			$products[] = $row;
+		}
+		return $products;
+	}
+	return null;
+}
