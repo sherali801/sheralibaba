@@ -10,6 +10,23 @@ if (!authenticateBuyer()) {
 
 $q = "";
 
+if (isset($_POST["submit"])) {
+  $buyer = getBuyerProfile($_SESSION["id"]);
+  $buyerId = $buyer["buyerId"];
+  $dt = MySqlFormattedTime(time());
+  $productsWithQuantities = array();
+  $productsIds = $_SESSION["cart"];
+  foreach ($productsIds as $productId) {
+    $productsWithQuantities[] = array($productId, $_POST["{$productId}"]);
+  }
+  if (placeOrder($buyerId, $productsWithQuantities, $dt)) {
+    $_SESSION["successes"][] = "Order has been placed.";
+    $_SESSION["cart"] = [];
+  } else {
+    $_SESSION["errors"][] = "Order was not placed.";
+  }
+}
+
 $products = getProductsInCart();
 
 ?>

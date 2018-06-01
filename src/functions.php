@@ -12,6 +12,11 @@ function redirect($to) {
 	exit(0);
 }
 
+function lastInsertId() {
+	global $conn;
+	return mysqli_insert_id($conn);
+}
+
 function authenticateUser() {
 	if (!isset($_SESSION["id"])) {
 		return false;
@@ -532,4 +537,42 @@ function getProductsInCart() {
 		return $products;
 	}
 	return null;
+}
+
+function placeOrder($buyerId, $productsWithQuantities, $dt) {
+	$status = false;
+	if (createOrder($buyerId, $dt)) {
+		$buyerOrderId = lastInsertId();
+		if (createOrderDetail($productsWithQuantities, $buyerOrderId)) {
+			$status = true;
+		}
+	}
+	return $status;
+}
+
+function createOrder($buyerId, $dt) {
+	global $conn;
+	$sql = "INSERT INTO buyer_order (
+			created_date, buyer_id
+			) VALUES (
+			'{$dt}', {$buyerId}
+			)";
+	$result = mysqli_query($conn, $sql);
+	return mysqli_affected_rows($conn) == 1;
+}
+
+function createOrderDetail($productsWithQuantities, $buyerOrderId) {
+	global $conn;
+	$status = 1;
+	$sql = "INSERT INTO order_detail 
+			(product_id, quantity, status, buyer_order_id) VALUES ";
+	foreach ($productsWithQuantities as $productWithQuantity) {
+		$productWithQuantity[] = $status;
+		$productWithQuantity[] = $buyerOrderId;
+		$orderDetail = implode(",", $productWithQuantity);
+		$sql .= "({$orderDetail}),";
+	}
+	$sql = rtrim($sql, ",");
+	$result = mysqli_query($conn, $sql);
+	return mysqli_affected_rows($conn) >= 1;
 }
