@@ -1,0 +1,134 @@
+DROP TABLE IF EXISTS user;
+DROP TABLE IF EXISTS admin;
+DROP TABLE IF EXISTS buyer;
+DROP TABLE IF EXISTS manufacturer;
+DROP TABLE IF EXISTS address;
+DROP TABLE IF EXISTS product;
+DROP TABLE IF EXISTS category;
+DROP TABLE IF EXISTS buyer_order;
+DROP TABLE IF EXISTS order_detail;
+
+CREATE TABLE user ( 
+id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+username VARCHAR(15) NOT NULL,
+pwd VARCHAR(255) NOT NULL,
+created_date DATETIME NOT NULL,
+modified_date DATETIME NOT NULL,
+role TINYINT UNSIGNED NOT NULL,
+role_id INT(11) UNSIGNED NOT NULL,
+address_id INT(11) UNSIGNED NOT NULL,
+PRIMARY KEY (id),
+UNIQUE (username),
+FOREIGN KEY (address_id) REFERENCES address(id)
+) ENGINE = InnoDB;
+
+CREATE TABLE admin ( 
+id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+first_name VARCHAR(25) NOT NULL,
+last_name VARCHAR(25) NOT NULL,
+contact_no VARCHAR(20) NOT NULL,
+email VARCHAR(255) NOT NULL,
+created_date DATETIME NOT NULL,
+modified_date DATETIME NOT NULL,
+PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
+CREATE TABLE buyer ( 
+id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+first_name VARCHAR(25) NOT NULL,
+last_name VARCHAR(25) NOT NULL,
+contact_no VARCHAR(20) NOT NULL,
+email VARCHAR(255) NOT NULL,
+created_date DATETIME NOT NULL,
+modified_date DATETIME NOT NULL,
+PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
+CREATE TABLE manufacturer ( 
+id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+business_name VARCHAR(255) NOT NULL,
+contact_no VARCHAR(20) NOT NULL,
+email VARCHAR(255) NOT NULL,
+url VARCHAR(255) NULL,
+description TINYTEXT NULL,
+created_date DATETIME NOT NULL,
+modified_date DATETIME NOT NULL,
+PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
+CREATE TABLE address ( 
+id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+street VARCHAR(255) NOT NULL,
+city VARCHAR(255) NOT NULL,
+state VARCHAR(255) NOT NULL,
+country VARCHAR(255) NOT NULL,
+zip VARCHAR(10) NOT NULL,
+created_date DATETIME NOT NULL,
+modified_date DATETIME NOT NULL,
+PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
+CREATE TABLE product ( 
+id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+product_name VARCHAR(15) NOT NULL,
+description TINYTEXT NOT NULL,
+price DECIMAL(8, 2) UNSIGNED NOT NULL,
+quantity MEDIUMINT UNSIGNED NOT NULL,
+visibility TINYINT UNSIGNED NOT NULL,
+created_date DATETIME NOT NULL,
+modified_date DATETIME NOT NULL,
+category_id MEDIUMINT UNSIGNED NOT NULL,
+image_id INT(11) UNSIGNED NOT NULL,
+manufacturer_id INT(11) UNSIGNED NOT NULL,
+PRIMARY KEY (id),
+FOREIGN KEY (category_id) REFERENCES category(id),
+FOREIGN KEY (image_id) REFERENCES image(id),
+FOREIGN KEY (manufacturer_id) REFERENCES manufacturer(id)
+) ENGINE = InnoDB;
+
+CREATE TABLE category ( 
+id MEDIUMINT UNSIGNED NOT NULL AUTO_INCREMENT,
+category_name VARCHAR(100) NOT NULL,
+created_date DATETIME NOT NULL,
+modified_date DATETIME NOT NULL,
+admin_id INT(11) UNSIGNED NOT NULL,
+PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
+CREATE TABLE buyer_order ( 
+id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+created_date DATETIME NOT NULL,
+buyer_id INT(11) UNSIGNED NOT NULL,
+PRIMARY KEY (id),
+FOREIGN KEY (buyer_id) REFERENCES buyer(id)
+) ENGINE = InnoDB;
+
+CREATE TABLE order_detail ( 
+id INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,
+quantity MEDIUMINT UNSIGNED NOT NULL,
+status TINYINT UNSIGNED NOT NULL,
+product_id INT(11) UNSIGNED NOT NULL,
+buyer_order_id INT(11) UNSIGNED NOT NULL,
+PRIMARY KEY (id),
+FOREIGN KEY (product_id) REFERENCES product(id),
+FOREIGN KEY (manufacturer_id) REFERENCES manufacturer(id),
+FOREIGN KEY (buyer_order_id) REFERENCES buyer_order(id)
+) ENGINE = InnoDB;
+
+INSERT INTO address (
+street, city, state, country, zip, created_date, modified_date
+) VALUES (
+'221B Baker Street', 'London', 'London', 'England', 'NW1 6XE', NOW(), NOW()
+);
+
+INSERT INTO admin (
+first_name, last_name, contact_no, email, created_date, modified_date
+) VALUES (
+'SherLock', 'Holmes', '555-666-777', 'sherlock@gmail.com', NOW(), NOW()
+);
+
+INSERT INTO user (
+username, pwd, created_date, modified_date, role, role_id, address_id
+) VALUES (
+'sherlock', '$2y$10$moUdhIEIoIym6FCcHqtIZ.yV1IbEuwkYfgqqb4xcq7h7p.u83CSP2', NOW(), NOW(), 1, 1, 1
+);
