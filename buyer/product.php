@@ -43,7 +43,7 @@ $product = getVisibleProductById($id);
           <li class="list-group-item"><b>Email: </b><?php echo $manufacturer["email"]; ?></li>
         </ul>
         <div class="panel-footer">
-          <button class="btn btn-primary">Add to Cart</button>
+          <button id=<?php echo $product["id"]; ?> class="btn <?php echo isProductInCart($product["id"]) ? "btn-success inCart" : "btn-primary addToCart"; ?>"><?php echo isProductInCart($product["id"]) ? "In Cart" : "Add to Cart"; ?></button>
         </div>
       </div>
     </div>

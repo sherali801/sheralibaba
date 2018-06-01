@@ -37,7 +37,7 @@ $categories = getAllCategories();
           </ul>
         </li>
       </ul>
-      <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="get" class="navbar-form navbar-left">
+      <form action="index.php" method="get" class="navbar-form navbar-left">
         <div class="form-group">
           <?php if (isset($_GET["manufacturerId"]) && !empty($_GET["manufacturerId"])) { ?>
             <input type="hidden" name="manufacturerId" value="<?php echo $manufacturerId; ?>">
