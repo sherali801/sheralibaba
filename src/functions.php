@@ -621,7 +621,7 @@ function getBuyerOrdersByManufacturer($manufacturerId) {
 
 function getBuyerOrdersByIdByManufacturer($orderId, $manufacturerId) {
 	global $conn;
-	$sql = "SELECT buyer_order.id orderId, buyer_order.created_date orderDate, product.product_name productName, product.quantity stock, order_detail.quantity orderedQuantity, order_detail.status orderStatus, CONCAT(buyer.first_name, ' ', buyer.last_name) buyerName, buyer.email email, buyer.contact_no contactNo, CONCAT(address.street, ', ', address.city, ', ', address.state, ', ', address.country) buyerAddress
+	$sql = "SELECT buyer_order.id orderId, buyer_order.created_date orderDate, order_detail.id orderDetailId, product.product_name productName, product.quantity stock, order_detail.quantity orderedQuantity, order_detail.status orderStatus, CONCAT(buyer.first_name, ' ', buyer.last_name) buyerName, buyer.email email, buyer.contact_no contactNo, CONCAT(address.street, ', ', address.city, ', ', address.state, ', ', address.country) buyerAddress
 			FROM buyer_order, order_detail, buyer, address, user, manufacturer, product
 			WHERE buyer_order.id = {$orderId}
 			AND manufacturer.id = {$manufacturerId}
@@ -641,4 +641,13 @@ function getBuyerOrdersByIdByManufacturer($orderId, $manufacturerId) {
 		return $orders;
 	}
 	return null;
+}
+
+function updateOrderDetailStatus($orderDetailId, $orderStatus) {
+	global $conn;
+	$sql = "UPDATE order_detail SET
+			status = {$orderStatus}
+			WHERE id = {$orderDetailId}";
+	$result = mysqli_query($conn, $sql);
+	return mysqli_affected_rows($conn) == 1;
 }
