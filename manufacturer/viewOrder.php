@@ -13,7 +13,6 @@ $manufacturer = getManufacturerProfile($id);
 $manufacturerId = $manufacturer["manufacturerId"];
 
 $orderId = $_GET["orderId"];
-
 $orders = getBuyerOrdersByIdByManufacturer($orderId, $manufacturerId);
 
 ?>
@@ -32,7 +31,7 @@ $orders = getBuyerOrdersByIdByManufacturer($orderId, $manufacturerId);
       }
     ?>
     <table class="table table-bordered table-striped">
-      <h3 class="text-center"><a href="viewOrder.php?id=<?php echo $orderId; ?>">Order # <?php echo $orderId; ?></a></h3>
+      <h3 class="text-center"><a href="viewOrder.php?orderId=<?php echo $orderId; ?>">Order # <?php echo $orderId; ?></a></h3>
       <tr>
         <th>Date</th>
         <th>Product</th>
@@ -41,7 +40,7 @@ $orders = getBuyerOrdersByIdByManufacturer($orderId, $manufacturerId);
         <th>Buyer</th>
         <th>Email</th>
         <th>Contact No.</th>
-		    <th>Address</th>
+		<th>Address</th>
         <th>Status</th>
       </tr>
       <?php foreach ($ordersById as $orderById) { ?>
