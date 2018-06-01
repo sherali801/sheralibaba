@@ -87,6 +87,18 @@ function getAdminProfile($id) {
 	return null;
 }
 
+function duplicateUsername($username) {
+	global $conn;
+	$count = 0;
+	$sql = "SELECT *
+			FROM user 
+			WHERE username = '{$username}'";
+	if ($result = mysqli_query($conn, $sql)) {
+		$count = mysqli_num_rows($result);
+	}
+	return $count == 0;
+}
+
 function duplicateUsernameWithId($username, $id) {
 	global $conn;
 	$sql = "SELECT COUNT(*)
@@ -264,6 +276,62 @@ function getManufacturerProfile($id) {
 	return null;
 }
 
+function createManufacturerProfile($username, $password, $businessName, $email, $contactNo, $url, $description, $street, $city, $state, $country, $zip, $dt) {
+	global $conn;
+	$status = false;
+	$conn->autocommit(false);
+	if (createAddress($street, $city, $state, $country, $zip, $dt)) {
+		$addressId = lastInsertId();
+		if (createManufacturer($businessName, $email, $contactNo, $url, $description, $dt)) {
+			$manufacturerId = lastInsertId();
+			if (createUser($username, $password, 2, $manufacturerId, $addressId, $dt)) {
+				$status = true;
+			} else {
+				die(mysqli_error($conn));
+			}
+		} else {
+			die("2");
+		}
+	} else {
+		die("1");
+	}
+	$conn->autocommit(true);
+	return $status;
+}
+
+function createManufacturer($businessName, $email, $contactNo, $url, $description, $dt) {
+	global $conn;
+	$sql = "INSERT INTO manufacturer (
+			business_name, email, contact_no, url, description, created_date, modified_date
+			) VALUES (
+			'{$businessName}', '{$email}', '{$contactNo}', '{$url}', '{$description}', '{$dt}', '{$dt}'
+			)";
+	$result = mysqli_query($conn, $sql);
+	return mysqli_affected_rows($conn) == 1;
+}
+
+function createAddress($street, $city, $state, $country, $zip, $dt) {
+	global $conn;
+	$sql = "INSERT INTO address (
+			street, city, state, country, zip, created_date, modified_date
+			) VALUES (
+			'{$street}', '{$city}', '{$state}', '{$country}', '{$zip}', '{$dt}', '{$dt}'
+			)";
+	$result = mysqli_query($conn, $sql);
+	return mysqli_affected_rows($conn) == 1;
+}
+
+function createUser($username, $password, $role, $roleId, $addressId, $dt) {
+	global $conn;
+	$sql = "INSERT INTO user (
+			username, pwd, role, role_id, address_id, created_date, modified_date
+			) VALUES (
+			'{$username}', '{$password}', '{$role}', '{$roleId}', '{$addressId}', '{$dt}', '{$dt}'
+			)";
+	$result = mysqli_query($conn, $sql);
+	return mysqli_affected_rows($conn) == 1;
+}
+
 function updateManufacturerProfile($id, $username, $password, $manufacturerId, $businessName, $email, $contactNo, $url, $description, $addressId, $street, $city, $state, $country, $zip, $dt) {
 	global $conn;
 	$status = false;
@@ -272,14 +340,8 @@ function updateManufacturerProfile($id, $username, $password, $manufacturerId, $
 		if (updateManufacturer($manufacturerId, $businessName, $email, $contactNo, $url, $description, $dt)) {
 			if (updateUser($id, $username, $password, $dt)) {
 				$status = true;
-			} else {
-				die("3");
 			}
-		} else {
-			die("2");
-		}
-	} else {
-		die("1");
+		} 
 	}
 	$conn->autocommit(true);
 	return $status;
@@ -297,6 +359,15 @@ function updateManufacturer($id, $businessName, $email, $contactNo, $url, $descr
 			WHERE id = {$id}";
 	$result = mysqli_query($conn, $sql);
 	return mysqli_affected_rows($conn) >= 0;
+}
+
+function duplicateBusinessName($businessName) {
+	global $conn;
+	$sql = "SELECT *
+			FROM manufacturer 
+			WHERE business_name = '{$businessName}'";
+	$result = mysqli_query($conn, $sql);
+	return mysqli_num_rows($result) == 0;
 }
 
 function duplicateBusinessNameWithId($businessName, $id) {
