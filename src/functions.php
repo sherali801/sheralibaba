@@ -595,3 +595,26 @@ function getBuyerOrders($buyerId) {
 	}
 	return null;
 }
+
+function getBuyerOrdersByManufacturer($manufacturerId) {
+	global $conn;
+	$sql = "SELECT buyer_order.id orderId, buyer_order.created_date orderDate, product.product_name productName, product.quantity stock, order_detail.quantity orderedQuantity, order_detail.status orderStatus, CONCAT(buyer.first_name, ' ', buyer.last_name) buyerName, buyer.email email, buyer.contact_no contactNo, CONCAT(address.street, ', ', address.city, ', ', address.state, ', ', address.country) buyerAddress
+			FROM buyer_order, order_detail, buyer, address, user, manufacturer, product
+			WHERE manufacturer.id = {$manufacturerId}
+			AND user.role = 3
+			AND buyer_order.buyer_id = buyer.id
+			AND order_detail.product_id = product.id
+			AND product.manufacturer_id = manufacturer.id
+			AND buyer_order.id = order_detail.buyer_order_id
+			AND user.role_id = buyer.id
+			AND user.address_id = address.id
+			ORDER BY buyer_order.id DESC";
+	if ($result = mysqli_query($conn, $sql)) {
+		$orders = [];
+		while ($row = mysqli_fetch_assoc($result)) {
+			$orders[] = $row;
+		}
+		return $orders;
+	}
+	return null;
+}
