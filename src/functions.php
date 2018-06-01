@@ -576,3 +576,22 @@ function createOrderDetail($productsWithQuantities, $buyerOrderId) {
 	$result = mysqli_query($conn, $sql);
 	return mysqli_affected_rows($conn) >= 1;
 }
+
+function getBuyerOrders($buyerId) {
+	global $conn;
+	$sql = "SELECT buyer_order.id orderId, buyer_order.created_date orderDate, product.product_name productName, order_detail.quantity quantity,  order_detail.status orderStatus, manufacturer.business_name businessName, manufacturer.email email, manufacturer.contact_no contactNo
+			FROM buyer_order, product, order_detail, manufacturer
+			WHERE buyer_order.buyer_id = {$buyerId}
+			AND order_detail.buyer_order_id = buyer_order.id
+			AND order_detail.product_id = product.id
+			AND product.manufacturer_id = manufacturer.id
+			ORDER BY buyer_order.id DESC";
+	if ($result = mysqli_query($conn, $sql)) {
+		$orders = [];
+		while ($row = mysqli_fetch_assoc($result)) {
+			$orders[] = $row;
+		}
+		return $orders;
+	}
+	return null;
+}
