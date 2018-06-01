@@ -299,12 +299,46 @@ function createManufacturerProfile($username, $password, $businessName, $email, 
 	return $status;
 }
 
+function createBuyerProfile($username, $password, $firstName, $lastName, $email, $contactNo, $street, $city, $state, $country, $zip, $dt) {
+	global $conn;
+	$status = false;
+	$conn->autocommit(false);
+	if (createAddress($street, $city, $state, $country, $zip, $dt)) {
+		$addressId = lastInsertId();
+		if (createBuyer($firstName, $lastName, $email, $contactNo, $dt)) {
+			$buyerId = lastInsertId();
+			if (createUser($username, $password, 3, $buyerId, $addressId, $dt)) {
+				$status = true;
+			} else {
+				die(mysqli_error($conn));
+			}
+		} else {
+			die("2");
+		}
+	} else {
+		die("1");
+	}
+	$conn->autocommit(true);
+	return $status;
+}
+
 function createManufacturer($businessName, $email, $contactNo, $url, $description, $dt) {
 	global $conn;
 	$sql = "INSERT INTO manufacturer (
 			business_name, email, contact_no, url, description, created_date, modified_date
 			) VALUES (
 			'{$businessName}', '{$email}', '{$contactNo}', '{$url}', '{$description}', '{$dt}', '{$dt}'
+			)";
+	$result = mysqli_query($conn, $sql);
+	return mysqli_affected_rows($conn) == 1;
+}
+
+function createBuyer($firstName, $lastName, $email, $contactNo, $dt) {
+	global $conn;
+	$sql = "INSERT INTO buyer (
+			first_name, last_name, email, contact_no, created_date, modified_date
+			) VALUES (
+			'{$firstName}', '{$lastName}', '{$email}', '{$contactNo}', '{$dt}', '{$dt}'
 			)";
 	$result = mysqli_query($conn, $sql);
 	return mysqli_affected_rows($conn) == 1;
