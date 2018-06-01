@@ -51,12 +51,12 @@ $categories = getAllCategories();
       </form>
       <ul class="nav navbar-nav navbar-right">
 	  	<li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Menu <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="editProfile.php">Edit Profile</a></li>
-            <li><a href="viewCart.php">View Cart</a></li>
-            <li><a href="viewOrders.php">View Orders</a></li>
-          </ul>
+        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Menu <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="editProfile.php">Edit Profile</a></li>
+          <li><a href="viewCart.php">View Cart</a></li>
+          <li><a href="viewOrders.php">View Orders</a></li>
+        </ul>
         </li>
         <li><a href="editProfile.php">Hi! <?php echo $_SESSION["username"]; ?></a></li>
         <li><a href="../logout.php">Logout</a></li>

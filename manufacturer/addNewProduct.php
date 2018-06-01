@@ -1,12 +1,6 @@
 <?php
 
-require_once "../src/session.php";
-require_once "../src/db_connection.php";
-require_once "../src/functions.php";
-
-if (!authenticateManufacturer()) {
-  redirect("../login.php");
-}
+require_once "include.php";
 
 $productName = "";
 $price = "";
@@ -48,7 +42,7 @@ if (isset($_POST["submit"])) {
 
 ?>
 
-<?php require_once "header.php"; ?>
+<?php require_once $manufacturerPath . "/header.php"; ?>
 
 <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" class="form-horizontal">
   <h3 class="text-center">Add New Product</h3>
@@ -111,4 +105,4 @@ if (isset($_POST["submit"])) {
   </div>
 </form>
 
-<?php require_once "footer.php"; ?>
+<?php require_once $manufacturerPath . "/footer.php"; ?>

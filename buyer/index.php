@@ -1,18 +1,12 @@
 <?php
 
-require_once "../src/session.php";
-require_once "../src/db_connection.php";
-require_once "../src/functions.php";
-
-if (!authenticateBuyer()) {
-  redirect("../login.php");
-}
+require_once "include.php";
 
 if (!isset($_SESSION["cart"])) {
   $_SESSION["cart"] = [];
 }
 
-$perPage = 3;
+$perPage = 6;
 
 if (isset($_GET["currentPage"]) && !empty($_GET["currentPage"])) {
   $currentPage = $_GET["currentPage"];
@@ -45,7 +39,7 @@ $products = getAllVisibleProducts($q, $manufacturerId, $categoryId, $perPage, $o
 
 ?>
 
-<?php require_once "header.php"; ?>
+<?php require_once $buyerPath . "/header.php"; ?>
 
 <?php if ($products != null) { ?>
   <h3 class="text-center">Products</h3>
@@ -90,4 +84,4 @@ $products = getAllVisibleProducts($q, $manufacturerId, $categoryId, $perPage, $o
   <h3 class="text-center">No Product Found.</h3>
 <?php } ?>
 
-<?php require_once "footer.php"; ?>
+<?php require_once $buyerPath . "/footer.php"; ?>

@@ -1,12 +1,6 @@
 <?php
 
-require_once "../src/session.php";
-require_once "../src/db_connection.php";
-require_once "../src/functions.php";
-
-if (!authenticateAdmin()) {
-  redirect("../login.php");
-}
+require_once "include.php";
 
 $categoryName = "";
 
@@ -28,7 +22,7 @@ if (isset($_POST["submit"])) {
 
 ?>
 
-<?php require_once "header.php"; ?>
+<?php require_once $adminPath . "/header.php"; ?>
 
 <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="post" class="form-horizontal">
   <h3 class="text-center">Add New Category</h2>
@@ -45,4 +39,4 @@ if (isset($_POST["submit"])) {
   </div>
 </form>
 
-<?php require_once "footer.php"; ?>
+<?php require_once $adminPath . "/footer.php"; ?>

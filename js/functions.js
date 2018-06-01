@@ -1,4 +1,7 @@
-$(".addToCart").click(addToCart);
+$("document").ready(function () {
+  $(".addToCart").click(addToCart);
+  $(".inCart").click(removeFromCart);
+});
 
 function addToCart() {
   var currentButton = this;
@@ -30,7 +33,6 @@ function addToCart() {
   return false;
 }
 
-$(".inCart").click(removeFromCart);
 
 function removeFromCart() {
   var currentButton = this;
@@ -39,7 +41,7 @@ function removeFromCart() {
   var settings = {
     type: "POST",
     dataType: "json",
-    url: "../src/api.php",
+    url: "..//src/api.php",
     data: {
         flag: "removeFromCart",
         id: id

@@ -1,12 +1,6 @@
 <?php
 
-require_once "../src/session.php";
-require_once "../src/db_connection.php";
-require_once "../src/functions.php";
-
-if (!authenticateManufacturer()) {
-  redirect("../login.php");
-}
+require_once "include.php";
 
 $id = $_SESSION["id"];
 $manufacturer = getManufacturerProfile($id);
@@ -17,7 +11,7 @@ $orders = getBuyerOrdersByIdByManufacturer($orderId, $manufacturerId);
 
 ?>
 
-<?php require_once "header.php"; ?>
+<?php require_once $manufacturerPath . "/header.php"; ?>
 
 <?php if ($orders != null) { ?>
   <?php $orderIds = array_unique(array_column($orders, "orderId")); ?>
@@ -85,4 +79,4 @@ $orders = getBuyerOrdersByIdByManufacturer($orderId, $manufacturerId);
   <h3 class="text-center">No Order Found.</h3>
 <?php } ?>
 
-<?php require_once "footer.php"; ?>
+<?php require_once $manufacturerPath . "/footer.php"; ?>

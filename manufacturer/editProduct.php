@@ -1,12 +1,6 @@
 <?php
 
-require_once "../src/session.php";
-require_once "../src/db_connection.php";
-require_once "../src/functions.php";
-
-if (!authenticateManufacturer()) {
-  redirect("../login.php");
-}
+require_once "include.php";
 
 $id = $_GET["id"];
 $manufacturer = getManufacturerProfile($_SESSION["id"]);
@@ -34,7 +28,7 @@ if (isset($_POST["submit"])) {
 
 ?>
 
-<?php require_once "header.php"; ?>
+<?php require_once $manufacturerPath . "/header.php"; ?>
 
 <form action="<?php echo $_SERVER["PHP_SELF"] . "?id={$id}"; ?>" method="post" class="form-horizontal">
   <h3 class="text-center">Edit Product</h3>
@@ -97,4 +91,4 @@ if (isset($_POST["submit"])) {
   </div>
 </form>
 
-<?php require_once "footer.php"; ?>
+<?php require_once $manufacturerPath . "/footer.php"; ?>

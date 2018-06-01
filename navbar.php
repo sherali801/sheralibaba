@@ -1,3 +1,10 @@
+<?php
+
+$manufacturers = getAllManufacturers();
+$categories = getAllCategories();
+
+?>
+
 <nav class="navbar navbar-default">
 	<!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
@@ -14,32 +21,42 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Manufacturers <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <?php foreach ($manufacturers as $manufacturer) { ?>
+                <li><a href="index.php?manufacturerId=<?php echo $manufacturer["id"]; ?>"><?php echo $manufacturer["business_name"]; ?></a></li>
+              <?php } ?>
+            </ul>
+        </li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Categories <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-          </ul>
-		    </li>
-		    <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
+            <?php foreach ($categories as $category) { ?>
+              <li><a href="index.php?categoryId=<?php echo $category["id"]; ?>"><?php echo $category["category_name"]; ?></a></li>
+            <?php } ?>
           </ul>
         </li>
       </ul>
-      <form class="navbar-form navbar-left">
+      <form action="<?php echo $_SERVER["PHP_SELF"]; ?>" method="get" class="navbar-form navbar-left">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search">
+          <?php if (isset($_GET["manufacturerId"]) && !empty($_GET["manufacturerId"])) { ?>
+            <input type="hidden" name="manufacturerId" value="<?php echo $manufacturerId; ?>">
+          <?php } ?>
+          <?php if (isset($_GET["categoryId"]) && !empty($_GET["categoryId"])) { ?>
+            <input type="hidden" name="categoryId" value="<?php echo $categoryId; ?>">
+          <?php } ?>
+          <input type="text" name="q" value="<?php echo $q; ?>" class="form-control" placeholder="Search">
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
+        <input type="submit" value="Submit" class="btn btn-primary">
       </form>
       <ul class="nav navbar-nav navbar-right">
-		<li><a href="#">Link</a></li>
-		<li><a href="#">Link</a></li>
+        <li><a href="advanceSearch.php">Advance Search</a></li>
+        <li><a href="login.php">Login</a></li>
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Dropdown <span class="caret"></span></a>
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Signup <span class="caret"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="#">Action</a></li>
-            <li><a href="#">Another action</a></li>
+            <li><a href="manufacturerSignup.php">Manufacturer</a></li>
+            <li><a href="buyerSignup.php">Buyer</a></li>
           </ul>
         </li>
       </ul>

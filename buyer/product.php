@@ -1,12 +1,6 @@
 <?php
 
-require_once "../src/session.php";
-require_once "../src/db_connection.php";
-require_once "../src/functions.php";
-
-if (!authenticateBuyer()) {
-  redirect("../login.php");
-}
+require_once "include.php";
 
 $q = "";
 
@@ -20,7 +14,7 @@ $product = getVisibleProductById($id);
 
 ?>
 
-<?php require_once "header.php"; ?>
+<?php require_once $buyerPath . "/header.php"; ?>
 
 <?php if ($product != null) { ?>
   <h3 class="text-center">Product</h3>
@@ -58,4 +52,4 @@ $product = getVisibleProductById($id);
   <h3 class="text-center">No Product Found.</h3>
 <?php } ?>
 
-<?php require_once "footer.php"; ?>
+<?php require_once $buyerPath . "/footer.php"; ?>

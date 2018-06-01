@@ -1,12 +1,6 @@
 <?php
 
-require_once "../src/session.php";
-require_once "../src/db_connection.php";
-require_once "../src/functions.php";
-
-if (!authenticateManufacturer()) {
-  redirect("../login.php");
-}
+require_once "include.php";
 
 $orderId = $_GET["orderId"];
 $orderDetailId = $_GET["orderDetailId"];

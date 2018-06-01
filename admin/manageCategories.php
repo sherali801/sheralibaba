@@ -1,12 +1,6 @@
 <?php
 
-require_once "../src/session.php";
-require_once "../src/db_connection.php";
-require_once "../src/functions.php";
-
-if (!authenticateAdmin()) {
-  redirect("../login.php");
-}
+require_once "include.php";
 
 $admin = getAdminProfile($_SESSION["id"]);
 $adminId = $admin["adminId"];
@@ -14,7 +8,7 @@ $categories = getAllCategoriesByAdminId($adminId);
 
 ?>
 
-<?php require_once "header.php"; ?>
+<?php require_once $adminPath . "/header.php"; ?>
 
   <?php if ($categories != null) { ?>
     <h3 class="text-center">Manage Categories</h3>
@@ -34,4 +28,4 @@ $categories = getAllCategoriesByAdminId($adminId);
     <h3 class="text-center">No Category Found.</h3>
   <?php } ?>
 
-<?php require_once "footer.php"; ?>
+<?php require_once $adminPath . "/footer.php"; ?>

@@ -1,12 +1,6 @@
 <?php
 
-require_once "../src/session.php";
-require_once "../src/db_connection.php";
-require_once "../src/functions.php";
-
-if (!authenticateBuyer()) {
-  redirect("../login.php");
-}
+require_once "include.php";
 
 $q = "";
 
@@ -31,7 +25,7 @@ $products = getProductsInCart();
 
 ?>
 
-<?php require_once "header.php"; ?>
+<?php require_once $buyerPath . "/header.php"; ?>
 
 <?php if ($products != null) { ?>
   <h3 class="text-center">Cart</h3>
@@ -60,4 +54,4 @@ $products = getProductsInCart();
   <h3 class="text-center">Cart is Empty.</h3>
 <?php } ?>
 
-<?php require_once "footer.php"; ?>
+<?php require_once $buyerPath . "/footer.php"; ?>

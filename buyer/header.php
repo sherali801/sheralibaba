@@ -10,8 +10,8 @@
 </head>
 <body>
 	
-	<?php require_once "navbar.php"; ?>
+	<?php require_once $buyerPath . "/navbar.php"; ?>
 
 	<div class="container">
-		<?php require_once "../error_messages.php"; ?>
-		<?php require_once "../success_messages.php"; ?>
+		<?php require_once $rootPath . "/errorMessages.php"; ?>
+		<?php require_once $rootPath . "/successMessages.php"; ?>

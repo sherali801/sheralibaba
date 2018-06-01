@@ -1,12 +1,6 @@
 <?php
 
-require_once "../src/session.php";
-require_once "../src/db_connection.php";
-require_once "../src/functions.php";
-
-if (!authenticateManufacturer()) {
-  redirect("../login.php");
-}
+require_once "include.php";
 
 $manufacturer = getManufacturerProfile($_SESSION["id"]);
 $manufacturerId = $manufacturer["manufacturerId"];
@@ -14,7 +8,7 @@ $products = getAllProductsByManufacturerId($manufacturerId);
 
 ?>
 
-<?php require_once "header.php"; ?>
+<?php require_once $manufacturerPath . "/header.php"; ?>
 
   <?php if ($products != null) { ?>
     <h3 class="text-center">Manage Products</h3>
@@ -42,4 +36,4 @@ $products = getAllProductsByManufacturerId($manufacturerId);
     <h3 class="text-center">No Product Found.</h3>
   <?php } ?>
 
-<?php require_once "footer.php"; ?>
+<?php require_once $manufacturerPath . "/footer.php"; ?>
