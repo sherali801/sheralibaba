@@ -111,7 +111,6 @@ product_id INT(11) UNSIGNED NOT NULL,
 buyer_order_id INT(11) UNSIGNED NOT NULL,
 PRIMARY KEY (id),
 FOREIGN KEY (product_id) REFERENCES product(id),
-FOREIGN KEY (manufacturer_id) REFERENCES manufacturer(id),
 FOREIGN KEY (buyer_order_id) REFERENCES buyer_order(id)
 ) ENGINE = InnoDB;
 
